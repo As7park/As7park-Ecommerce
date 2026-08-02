@@ -140,13 +140,6 @@
 		z-index: 1;
 	}
 
-	.canva {
-		position: absolute;
-		width: 100vw;
-		height: 100vh;
-		z-index: 1;
-	}
-
 	.content {
 		position: absolute;
 		z-index: 1;
