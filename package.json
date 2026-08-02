@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"postinstall": "prisma generate",
 		"clean:vite": "rimraf node_modules/.vite .vite_cache",
 		"dev": "vite dev --port 2000",
 		"cacheclean": "npm cache clean --force",

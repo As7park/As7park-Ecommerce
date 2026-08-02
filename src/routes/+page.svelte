@@ -1,257 +1,224 @@
 <script lang="ts">
-	import '@fontsource-variable/open-sans';
-	import '@fontsource-variable/raleway';
-	import { fly } from 'svelte/transition';
-	import { goto } from '$app/navigation';
-	import { mode } from 'mode-watcher';
-	import { Power } from 'lucide-svelte';
-	import { isSmall } from '$lib/store/mediaStore';
-	import { page } from '$app/stores';
-	import SEO from '$lib/components/SEO.svelte';
-
-	let animateLines = $state(false); // Contrôle de l'animation des lignes
-
-	function handleClick() {
-		goto('/atelier');
-	}
-
-	let strokeColor = $state('black');
-
-	$effect(() => {
-		/* se relance automatiquement quand mode.current change */
-		strokeColor = mode.current === 'light' ? '#00021a' : '#00c2ff';
-	});
-
-	const onHoverButton = () => {
-		animateLines = !animateLines;
-	};
-
-	$effect(() => {
-		// Les deux lectures ci-dessous sont les dépendances ;
-		// le $effect se relancera si l'une change.
-		const path = $page.url.pathname;
-		const small = $isSmall;
-
-	});
+	// Liens réseaux sociaux — à personnaliser
+	const socials = [
+		{ label: 'Instagram', href: 'https://instagram.com/as7park', icon: '/construction/instagram.png' },
+		{ label: 'Facebook', href: 'https://facebook.com/as7park', icon: '/construction/facebook.png' },
+		{ label: 'WhatsApp', href: 'https://wa.me/33000000000', icon: '/construction/whatsapp.png' },
+		{ label: 'Mail', href: 'mailto:contact@as7park.com', icon: '/construction/mail.png' }
+	];
 </script>
 
-<!-- SEO pour la page d'accueil -->
-<SEO pageKey="home" />
+<svelte:head>
+	<title>AS7 Park — En cours de construction</title>
+	<meta name="description" content="Le site AS7 Park est en cours de construction. Restez connectés." />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap"
+		rel="stylesheet"
+	/>
+</svelte:head>
 
-<div class="containerHome ccc absolute z-30 top-[25vh] left-[10vw]">
-	<h1 class="titleHome" style={`-webkit-text-stroke-color: ${strokeColor};`}>
-		<span
-			class="firstline {animateLines ? 'hovered' : ''}"
-			transition:fly={{ x: -88, duration: 100 }}
-		>
-			Customise ta
-		</span>
+<div class="stage">
+	<div class="page">
+		<div class="url-badge">WWW.AS7PARK.COM</div>
 
-		<span
-			class="secondline {animateLines ? 'hovered' : ''}"
-			transition:fly={{ x: -88, duration: 100 }}
-		>
-			canette et
-		</span>
+		<h1 class="headline">
+			<span class="typewriter">En cours de construction...</span>
+		</h1>
 
-		<span
-			class="thirdline {animateLines ? 'hovered' : ''}"
-			transition:fly={{ x: -88, duration: 200 }}
-		>
-			commande la
-		</span>
-	</h1>
-	<button
-		class="ccc buttonHome"
-		transition:fly={{ x: -88, duration: 500 }}
-		onclick={handleClick}
-		onmouseenter={onHoverButton}
-		onmouseleave={onHoverButton}
-	>
-		<a
-			class="buttonStart rcc"
-			style="color: {strokeColor}; --stroke-color: {strokeColor};"
-			href="/atelier"
-		>
-			Commencer
-			<span>
-				<Power class="ml-10" />
-			</span>
-		</a>
-	</button>
-	<a class="buttonCatalogue" href="/catalogue" transition:fly={{ x: -88, duration: 600 }}>
-		Notre catalogue
-	</a>
+		<div class="contact">
+			<div class="contact-title">Informations &amp; contact :</div>
+
+			<div class="socials">
+				{#each socials as social (social.label)}
+					<a
+						class="social-item"
+						href={social.href}
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label={social.label}
+					>
+						<span class="social-icon-wrap">
+							<img src={social.icon} alt="" />
+						</span>
+						<span class="social-label">{social.label.toUpperCase()}</span>
+					</a>
+				{/each}
+			</div>
+		</div>
+	</div>
 </div>
 
-<style lang="scss">
-	@media screen and (max-width: 1000px) {
-		.containerHome {
-			top: 5vh;
-			left: 50vw;
-			transform: translate(-50%, 0%);
-			width: 500px;
-		}
-	}
-
-	@media screen and (max-width: 600px) {
-		.containerHome {
-			width: 400px !important;
-		}
-		.titleHome {
-			width: 400px !important;
-		}
-		.firstline {
-			font-size: 40px !important;
-			width: 400px !important;
-		}
-		.secondline {
-			font-size: 50px !important;
-			width: 400px !important;
-		}
-		.thirdline {
-			font-size: 40px !important;
-			width: 400px !important;
-		}
-	}
-
-	@media screen and (max-width: 425px) {
-		.containerHome {
-			width: 300px !important;
-		}
-		.titleHome {
-			width: 300px !important;
-			-webkit-text-stroke-width: 1px !important;
-			height: 100px !important;
-		}
-		.firstline {
-			font-size: 30px !important;
-			width: 300px !important;
-		}
-		.secondline {
-			font-size: 40px !important;
-			width: 250px !important;
-			top: 25px !important;
-			left: 50px !important;
-		}
-		.thirdline {
-			font-size: 30px !important;
-			width: 300px !important;
-			top: 65px !important;
-		}
-	}
-
-	.titleHome {
-		text-align: center;
-		font-family: 'Open Sans Variable', sans-serif;
-		font-style: italic;
-		text-align: left;
-		font-size: 57px;
-		-webkit-text-stroke-color: black;
-		-webkit-text-stroke-width: 2px;
-		color: transparent;
-		text-transform: uppercase;
-		font-weight: 900;
-		width: 100%;
-	}
-
-	.firstline,
-	.secondline,
-	.thirdline {
-		position: absolute;
-		transition: transform 0.4s ease-in-out;
-	}
-
-	.firstline.hovered {
-		transform: translateX(40px);
-	}
-
-	.secondline.hovered {
-		transform: translateX(50px);
-	}
-
-	.thirdline.hovered {
-		transform: translateX(20px);
-	}
-
-	.titleHome {
-		width: 500px;
-		height: 200px;
-	}
-
-	.firstline {
-		font-size: 60px;
-		width: 500px;
-	}
-	.secondline {
-		font-size: 75px;
-		width: 500px;
-		top: 53px;
-		left: 100px;
-	}
-	.thirdline {
-		font-size: 56px;
-		width: 500px;
-		top: 130px;
-	}
-
-	.buttonHome {
-		margin-top: 5vh;
-		border-radius: 16px;
-		transform: translateX(33px);
-
-		a {
-			font-family: 'Open Sans Variable', sans-serif;
-			text-align: left;
-			color: black;
-			text-transform: uppercase;
-			font-size: 22px;
-
-			span {
-				transform: translateY(35px);
-				transition: all 0.4s ease-in-out;
-			}
-		}
-		&:hover {
-			a {
-				span {
-					transform: translateY(0px);
-				}
-			}
-		}
-	}
-
-	.buttonStart {
-		position: relative;
+<style>
+	.stage {
+		position: fixed;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #000;
 		overflow: hidden;
+		font-family: 'Oswald', 'Arial Narrow', sans-serif;
+		color: #fff;
+	}
 
-		&::before {
-			content: '';
-			position: absolute;
-			z-index: -1;
-			top: 0;
-			left: 0;
-			width: 10px;
-			height: 2px;
-			background-color: var(--stroke-color);
-			transition: all 0.4s;
+	/* Conteneur verrouillé sur le ratio du background (4122 x 2760) */
+	.page {
+		position: relative;
+		width: min(1600px, 100vw, calc(100vh * 4122 / 2760));
+		height: min(calc(1600px * 2760 / 4122), 100vh, calc(100vw * 2760 / 4122));
+		background-image: url('/construction/background.png');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+
+	.url-badge {
+		position: absolute;
+		top: 6.2%;
+		left: 50%;
+		transform: translateX(-50%);
+		background: #fff;
+		color: #0a0a0a;
+		padding: 0.9% 3.2%;
+		border-radius: 6px;
+		font-weight: 700;
+		font-style: italic;
+		letter-spacing: 0.04em;
+		font-size: clamp(14px, 2.6vw, 40px);
+		white-space: nowrap;
+		box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+	}
+
+	.headline {
+		position: absolute;
+		top: 15.5%;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 90%;
+		text-align: center;
+		font-weight: 700;
+		font-style: italic;
+		letter-spacing: 0.01em;
+		font-size: clamp(20px, 5vw, 74px);
+		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+		white-space: nowrap;
+		margin: 0;
+	}
+
+	.typewriter {
+		display: inline-block;
+		max-width: 27ch;
+		overflow: hidden;
+		white-space: nowrap;
+		vertical-align: bottom;
+		border-right: 0.09em solid #fff;
+		width: 0ch;
+		animation:
+			typing 6s infinite,
+			blink-caret 0.75s step-end infinite;
+	}
+
+	@keyframes typing {
+		0% {
+			width: 0ch;
+			animation-timing-function: steps(27, end);
 		}
-		&:hover {
-			&::before {
-				width: 200px;
-			}
+		45% {
+			width: 27ch;
+			animation-timing-function: step-end;
+		}
+		62% {
+			width: 27ch;
+			animation-timing-function: steps(27, end);
+		}
+		88% {
+			width: 0ch;
+			animation-timing-function: step-end;
+		}
+		100% {
+			width: 0ch;
 		}
 	}
 
-	.buttonCatalogue {
-		margin-top: 15px;
-		font-family: 'Open Sans Variable', sans-serif;
-		font-size: 14px;
-		letter-spacing: 0px;
-		transition: all 0.25s ease-in-out;
+	@keyframes blink-caret {
+		50% {
+			border-color: transparent;
+		}
+	}
 
-		&:hover {
-			letter-spacing: 1px;
+	.contact {
+		position: absolute;
+		bottom: 16%;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100%;
+		text-align: center;
+	}
+
+	.contact-title {
+		font-weight: 700;
+		font-style: italic;
+		font-size: clamp(16px, 3.1vw, 44px);
+		margin-bottom: 2.2%;
+		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+	}
+
+	.socials {
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		gap: 6.5%;
+	}
+
+	.social-item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6%;
+		text-decoration: none;
+		color: #fff;
+		transition: transform 0.2s ease;
+	}
+
+	.social-item:hover {
+		transform: translateY(-4px);
+	}
+
+	.social-icon-wrap {
+		width: clamp(34px, 5.4vw, 78px);
+		height: clamp(34px, 5.4vw, 78px);
+		border-radius: 50%;
+		border: 2px solid #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		transition: background 0.2s ease;
+	}
+
+	.social-item:hover .social-icon-wrap {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.social-icon-wrap img {
+		width: 58%;
+		height: 58%;
+		object-fit: contain;
+	}
+
+	.social-label {
+		font-weight: 700;
+		font-style: italic;
+		letter-spacing: 0.03em;
+		font-size: clamp(9px, 1.3vw, 18px);
+		text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+	}
+
+	@media (max-width: 480px) {
+		.socials {
+			gap: 4%;
 		}
 	}
 </style>

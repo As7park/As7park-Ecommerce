@@ -87,26 +87,31 @@
 	<meta name="theme-color" content="#4285f4" />
 </svelte:head>
 
-{#if !$firstLoadComplete}
-	<!-- <Loader /> -->
-{/if}
-{#if $isClient}
-	<div class="wappper">
-		<ModeWatcher />
-		<Navigation {data} />
-		<div class="container ccc">
-			<div class="wrapperScroll">
-				<SmoothScrollBar>
-					<main class="mainLayout">
-						<div class="content ccc" bind:this={contentRef}>
-							{@render children()}
-						</div>
-					</main>
-				</SmoothScrollBar>
+{#if $page.url.pathname === '/'}
+	<!-- Page "en cours de construction" : plein écran, sans la navigation du boilerplate -->
+	{@render children()}
+{:else}
+	{#if !$firstLoadComplete}
+		<!-- <Loader /> -->
+	{/if}
+	{#if $isClient}
+		<div class="wappper">
+			<ModeWatcher />
+			<Navigation {data} />
+			<div class="container ccc">
+				<div class="wrapperScroll">
+					<SmoothScrollBar>
+						<main class="mainLayout">
+							<div class="content ccc" bind:this={contentRef}>
+								{@render children()}
+							</div>
+						</main>
+					</SmoothScrollBar>
+				</div>
 			</div>
+			<Toaster />
 		</div>
-		<Toaster />
-	</div>
+	{/if}
 {/if}
 
 <style lang="scss">
