@@ -83,7 +83,7 @@
 		position: relative;
 		width: 100%;
 		aspect-ratio: 4122 / 2760;
-		max-height: 55vh;
+		max-height: 62vh;
 		background-image: url('/construction/background.png');
 		background-size: cover;
 		background-position: center;
@@ -98,14 +98,14 @@
 	@media (min-aspect-ratio: 4122/2760) {
 		.page {
 			width: auto;
-			height: 55vh;
+			height: 62vh;
 			max-width: 100%;
 		}
 	}
 
 	.url-badge {
 		position: absolute;
-		top: 7%;
+		top: 3.5%;
 		left: 50%;
 		transform: translateX(-50%);
 		background: #fff;
@@ -180,6 +180,7 @@
 	.contact {
 		width: 100%;
 		text-align: center;
+		margin-top: clamp(4px, 2vh, 20px);
 	}
 
 	.contact-title {
