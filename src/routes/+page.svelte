@@ -20,12 +20,14 @@
 </svelte:head>
 
 <div class="stage">
-	<div class="page">
-		<div class="url-badge">WWW.AS7PARK.COM</div>
+	<div class="wrap">
+		<div class="page">
+			<div class="url-badge">WWW.AS7PARK.COM</div>
 
-		<h1 class="headline">
-			<span class="typewriter">En cours de construction...</span>
-		</h1>
+			<h1 class="headline">
+				<span class="typewriter">En cours de construction...</span>
+			</h1>
+		</div>
 
 		<div class="contact">
 			<div class="contact-title">Informations &amp; contact :</div>
@@ -58,25 +60,52 @@
 		align-items: center;
 		justify-content: center;
 		background: #000;
-		overflow: hidden;
+		overflow-y: auto;
+		overflow-x: hidden;
 		font-family: 'Oswald', 'Arial Narrow', sans-serif;
 		color: #fff;
+		padding: 32px 16px;
+		box-sizing: border-box;
 	}
 
-	/* Conteneur verrouillé sur le ratio du background (4122 x 2760) */
+	.wrap {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: clamp(20px, 3.5vh, 40px);
+		width: 100%;
+		max-width: 1200px;
+		margin: auto;
+	}
+
+	/* Image de fond : plus petite, centrée, ratio conservé (4122 x 2760) */
 	.page {
 		position: relative;
-		width: min(1600px, 100vw, calc(100vh * 4122 / 2760));
-		height: min(calc(1600px * 2760 / 4122), 100vh, calc(100vw * 2760 / 4122));
+		width: 100%;
+		aspect-ratio: 4122 / 2760;
+		max-height: 55vh;
 		background-image: url('/construction/background.png');
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
+		border-radius: 14px;
+		overflow: hidden;
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+	}
+
+	/* Sur les écrans où la largeur limite plus que la hauteur,
+	   on laisse aspect-ratio piloter via la largeur */
+	@media (min-aspect-ratio: 4122/2760) {
+		.page {
+			width: auto;
+			height: 55vh;
+			max-width: 100%;
+		}
 	}
 
 	.url-badge {
 		position: absolute;
-		top: 6.2%;
+		top: 7%;
 		left: 50%;
 		transform: translateX(-50%);
 		background: #fff;
@@ -86,24 +115,23 @@
 		font-weight: 700;
 		font-style: italic;
 		letter-spacing: 0.04em;
-		font-size: clamp(14px, 2.6vw, 40px);
+		font-size: clamp(11px, 2.6vw, 26px);
 		white-space: nowrap;
 		box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
 	}
 
 	.headline {
 		position: absolute;
-		top: 15.5%;
+		top: 50%;
 		left: 50%;
-		transform: translateX(-50%);
+		transform: translate(-50%, -50%);
 		width: 90%;
 		text-align: center;
 		font-weight: 700;
 		font-style: italic;
 		letter-spacing: 0.01em;
-		font-size: clamp(20px, 5vw, 74px);
+		font-size: clamp(14px, 4.2vw, 40px);
 		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-		white-space: nowrap;
 		margin: 0;
 	}
 
@@ -148,11 +176,8 @@
 		}
 	}
 
+	/* Bloc contact : en flux normal, sous l'image */
 	.contact {
-		position: absolute;
-		bottom: 16%;
-		left: 50%;
-		transform: translateX(-50%);
 		width: 100%;
 		text-align: center;
 	}
@@ -160,23 +185,24 @@
 	.contact-title {
 		font-weight: 700;
 		font-style: italic;
-		font-size: clamp(16px, 3.1vw, 44px);
-		margin-bottom: 2.2%;
-		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+		font-size: clamp(15px, 2.6vw, 26px);
+		margin-bottom: 16px;
 	}
 
 	.socials {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: center;
 		align-items: flex-start;
-		gap: 6.5%;
+		gap: 24px;
+		row-gap: 20px;
 	}
 
 	.social-item {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 6%;
+		gap: 6px;
 		text-decoration: none;
 		color: #fff;
 		transition: transform 0.2s ease;
@@ -187,8 +213,8 @@
 	}
 
 	.social-icon-wrap {
-		width: clamp(34px, 5.4vw, 78px);
-		height: clamp(34px, 5.4vw, 78px);
+		width: clamp(38px, 7vw, 60px);
+		height: clamp(38px, 7vw, 60px);
 		border-radius: 50%;
 		border: 2px solid #fff;
 		display: flex;
@@ -212,13 +238,13 @@
 		font-weight: 700;
 		font-style: italic;
 		letter-spacing: 0.03em;
-		font-size: clamp(9px, 1.3vw, 18px);
-		text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+		font-size: clamp(9px, 1.4vw, 14px);
 	}
 
 	@media (max-width: 480px) {
 		.socials {
-			gap: 4%;
+			gap: 16px;
+			row-gap: 18px;
 		}
 	}
 </style>
