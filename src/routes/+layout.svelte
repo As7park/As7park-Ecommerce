@@ -23,6 +23,17 @@
 
 	let { children, data } = $props();
 	let cartInitialized = $state(false);
+
+	// Routes de la boutique (groupe de routes (shop)) : elles fournissent leur
+	// propre en-tête/pied de page et défilement de document classique, donc on
+	// les fait passer devant la coquille du boilerplate (Navigation + SmoothScrollBar),
+	// comme la page "en construction" à la racine.
+	const SHOP_ROUTE_PREFIXES = ['/accueil', '/boutique', '/produit', '/panier', '/contact'];
+	let isShopRoute = $derived(
+		SHOP_ROUTE_PREFIXES.some(
+			(prefix) => $page.url.pathname === prefix || $page.url.pathname.startsWith(`${prefix}/`)
+		)
+	);
 	$effect(() => {
 		const unsubscribe = page.subscribe((currentPage) => {
 			initializeLayoutState(currentPage);
@@ -87,8 +98,9 @@
 	<meta name="theme-color" content="#4285f4" />
 </svelte:head>
 
-{#if $page.url.pathname === '/'}
-	<!-- Page "en cours de construction" : plein écran, sans la navigation du boilerplate -->
+{#if $page.url.pathname === '/' || isShopRoute}
+	<!-- Page "en cours de construction" ou pages boutique : plein écran / défilement
+	     classique, sans la navigation du boilerplate. -->
 	{@render children()}
 {:else}
 	{#if !$firstLoadComplete}

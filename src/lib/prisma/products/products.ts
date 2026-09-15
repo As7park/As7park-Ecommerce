@@ -56,12 +56,54 @@ export const getAllProducts = async () => {
 						category: true
 					}
 				}
-			}
+			},
+			orderBy: { createdAt: 'desc' }
 		});
 		return products;
 	} catch (error) {
 		console.error('Error fetching products:', error);
 		throw new Error('Could not fetch products');
+	}
+};
+
+export const getProductBySlug = async (slug: string) => {
+	try {
+		return await prisma.product.findUnique({
+			where: { slug },
+			include: {
+				categories: {
+					include: {
+						category: true
+					}
+				}
+			}
+		});
+	} catch (error) {
+		console.error('Error fetching product by slug:', error);
+		throw new Error('Could not fetch product');
+	}
+};
+
+export const getRelatedProducts = async (
+	categoryIds: string[],
+	excludeProductId: string,
+	take = 4
+) => {
+	if (categoryIds.length === 0) return [];
+	try {
+		return await prisma.product.findMany({
+			where: {
+				id: { not: excludeProductId },
+				categories: { some: { categoryId: { in: categoryIds } } }
+			},
+			include: {
+				categories: { include: { category: true } }
+			},
+			take
+		});
+	} catch (error) {
+		console.error('Error fetching related products:', error);
+		throw new Error('Could not fetch related products');
 	}
 };
 
