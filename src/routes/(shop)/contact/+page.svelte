@@ -3,6 +3,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { toast } from 'svelte-sonner';
 	import { contactSchema } from '$lib/schema/contact/contactSchema';
+	import { reveal } from '$lib/actions/reveal';
 
 	let { data } = $props();
 
@@ -12,8 +13,14 @@
 	});
 	const { form, errors, enhance, message: formMessage, delayed } = contactFormCtx;
 
+	let justSent = $state(false);
+
 	$effect(() => {
-		if ($formMessage) toast.success($formMessage);
+		if ($formMessage) {
+			toast.success($formMessage);
+			justSent = true;
+			setTimeout(() => (justSent = false), 1400);
+		}
 	});
 </script>
 
@@ -25,7 +32,7 @@
 
 <main class="shop-container">
 	<div class="shop-contact-layout">
-		<div>
+		<div use:reveal>
 			<h1 class="shop-section-title">Nous contacter</h1>
 			<form method="POST" use:enhance>
 				<div class="shop-form-field">
@@ -55,13 +62,22 @@
 					></textarea>
 					{#if $errors.message}<p class="shop-form-error">{$errors.message}</p>{/if}
 				</div>
-				<button type="submit" class="shop-btn" disabled={$delayed}>
-					{$delayed ? 'Envoi…' : 'Envoyer le message'}
+				<button
+					type="submit"
+					class="shop-btn"
+					class:shop-btn-success={justSent}
+					disabled={$delayed}
+				>
+					{#if justSent}
+						Envoyé ✓
+					{:else}
+						{$delayed ? 'Envoi…' : 'Envoyer le message'}
+					{/if}
 				</button>
 			</form>
 		</div>
 
-		<div class="shop-contact-info">
+		<div class="shop-contact-info" use:reveal={{ delay: 100 }}>
 			<div>
 				<h4>Adresse</h4>
 				<p>AS7 Park</p>

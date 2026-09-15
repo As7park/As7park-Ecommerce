@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
+	import { fade, slide } from 'svelte/transition';
 	import ProductCard from '$lib/components/shop/ProductCard.svelte';
+	import { reveal } from '$lib/actions/reveal';
 	import { addToCart } from '$lib/store/Data/cartStore';
 	import { formatPrice } from '$lib/utils/formatPrice';
 
@@ -8,12 +10,32 @@
 
 	let activeImageIndex = $state(0);
 	let quantity = $state(1);
+	let justAdded = $state(false);
+
+	const accordionItems = [
+		{ title: 'Description', getContent: () => data.product.description },
+		{
+			title: 'Livraison & retours',
+			getContent: () =>
+				'Expédié sous 5 à 7 jours ouvrés. Retours acceptés sous 14 jours pour les produits non personnalisés.'
+		},
+		{
+			title: 'Avis clients',
+			getContent: () => 'Les avis clients seront bientôt disponibles sur cette fiche produit.'
+		}
+	];
+	let openPanels = $state([true, false, false]);
+
+	function togglePanel(i: number) {
+		openPanels[i] = !openPanels[i];
+	}
 
 	// Réinitialise la galerie/quantité quand on navigue d'une fiche produit à une autre.
 	$effect(() => {
 		data.product.id;
 		activeImageIndex = 0;
 		quantity = 1;
+		justAdded = false;
 	});
 
 	let mainImage = $derived(data.product.images[activeImageIndex] ?? data.product.images[0]);
@@ -41,6 +63,8 @@
 			price: data.product.price
 		});
 		toast.success('Produit ajouté au panier.');
+		justAdded = true;
+		setTimeout(() => (justAdded = false), 1400);
 	}
 </script>
 
@@ -55,13 +79,17 @@
 
 <main class="shop-container">
 	<div class="shop-product-layout">
-		<div class="shop-product-gallery">
+		<div class="shop-product-gallery" use:reveal>
 			<div class="shop-ph shop-ph-portrait">
-				{#if mainImage}
-					<img src={mainImage} alt={data.product.name} />
-				{:else}
-					Image produit
-				{/if}
+				{#key mainImage}
+					<div style="width:100%; height:100%;" in:fade={{ duration: 280 }}>
+						{#if mainImage}
+							<img src={mainImage} alt={data.product.name} />
+						{:else}
+							Image produit
+						{/if}
+					</div>
+				{/key}
 			</div>
 			{#if data.product.images.length > 1}
 				<div class="shop-gallery-thumbs">
@@ -79,7 +107,7 @@
 			{/if}
 		</div>
 
-		<div class="shop-product-info">
+		<div class="shop-product-info" use:reveal={{ delay: 90 }}>
 			<div>
 				{#if data.product.categories[0]}
 					<p class="shop-eyebrow">{data.product.categories[0].category.name}</p>
@@ -111,8 +139,17 @@
 			</div>
 
 			<div class="shop-product-actions">
-				<button class="shop-btn shop-btn-block" disabled={!inStock} onclick={handleAddToCart}>
-					{inStock ? 'Ajouter au panier' : 'Rupture de stock'}
+				<button
+					class="shop-btn shop-btn-block"
+					class:shop-btn-success={justAdded}
+					disabled={!inStock}
+					onclick={handleAddToCart}
+				>
+					{#if justAdded}
+						Ajouté ✓
+					{:else}
+						{inStock ? 'Ajouter au panier' : 'Rupture de stock'}
+					{/if}
 				</button>
 			</div>
 
@@ -123,33 +160,35 @@
 			</p>
 
 			<div class="shop-accordion">
-				<details class="shop-accordion-item" open>
-					<summary>Description <span>+</span></summary>
-					<div>{data.product.description}</div>
-				</details>
-				<details class="shop-accordion-item">
-					<summary>Livraison & retours <span>+</span></summary>
-					<div>
-						Expédié sous 5 à 7 jours ouvrés. Retours acceptés sous 14 jours pour les produits non
-						personnalisés.
+				{#each accordionItems as item, i (item.title)}
+					<div class="shop-accordion-item">
+						<button
+							type="button"
+							class="shop-accordion-trigger"
+							aria-expanded={openPanels[i]}
+							onclick={() => togglePanel(i)}
+						>
+							{item.title} <span class="shop-accordion-icon">+</span>
+						</button>
+						{#if openPanels[i]}
+							<div class="shop-accordion-panel" transition:slide={{ duration: 250 }}>
+								<div class="shop-accordion-panel-inner">{item.getContent()}</div>
+							</div>
+						{/if}
 					</div>
-				</details>
-				<details class="shop-accordion-item">
-					<summary>Avis clients <span>+</span></summary>
-					<div>Les avis clients seront bientôt disponibles sur cette fiche produit.</div>
-				</details>
+				{/each}
 			</div>
 		</div>
 	</div>
 
 	{#if data.relatedProducts.length > 0}
 		<section class="shop-section">
-			<div class="shop-section-head">
+			<div class="shop-section-head" use:reveal>
 				<h2 class="shop-section-title">Vous aimerez aussi</h2>
 			</div>
 			<div class="shop-grid shop-grid-4">
-				{#each data.relatedProducts as product (product.id)}
-					<ProductCard {product} />
+				{#each data.relatedProducts as product, i (product.id)}
+					<ProductCard {product} index={i} />
 				{/each}
 			</div>
 		</section>

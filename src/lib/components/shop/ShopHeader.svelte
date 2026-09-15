@@ -1,8 +1,20 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { scale } from 'svelte/transition';
 	import { cart } from '$lib/store/Data/cartStore';
 
 	let cartCount = $derived($cart.items.reduce((sum, item) => sum + item.quantity, 0));
+
+	let previousCount = 0;
+	let bump = $state(false);
+
+	$effect(() => {
+		if (cartCount > previousCount) {
+			bump = true;
+			setTimeout(() => (bump = false), 450);
+		}
+		previousCount = cartCount;
+	});
 </script>
 
 <header class="shop-site-header">
@@ -29,7 +41,9 @@
 			<a href="/panier" aria-label="Panier" class="shop-cart-link">
 				<span class="shop-icon-ph">P</span>
 				{#if cartCount > 0}
-					<span class="shop-cart-count">{cartCount}</span>
+					<span class="shop-cart-count" class:shop-bump={bump} transition:scale={{ duration: 250 }}
+						>{cartCount}</span
+					>
 				{/if}
 			</a>
 		</div>

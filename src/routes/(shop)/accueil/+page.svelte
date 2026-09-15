@@ -1,6 +1,7 @@
 <script lang="ts">
 	import HeroDark from '$lib/components/shop/HeroDark.svelte';
-	import ProductCard from '$lib/components/shop/ProductCard.svelte';
+	import ProductRunner from '$lib/components/shop/ProductRunner.svelte';
+	import { reveal } from '$lib/actions/reveal';
 
 	let { data } = $props();
 </script>
@@ -29,14 +30,18 @@
 
 	<div class="shop-container">
 		<section class="shop-section">
-			<div class="shop-section-head">
+			<div class="shop-section-head" use:reveal>
 				<h2 class="shop-section-title">Catégories</h2>
 				<a href="/boutique" class="shop-link">Voir tout</a>
 			</div>
 			{#if data.categories.length > 0}
 				<div class="shop-grid shop-grid-4">
-					{#each data.categories as category (category.id)}
-						<a class="shop-card" href={`/boutique?categorie=${category.id}`}>
+					{#each data.categories as category, i (category.id)}
+						<a
+							class="shop-card"
+							href={`/boutique?categorie=${category.id}`}
+							use:reveal={{ delay: i * 70 }}
+						>
 							<div class="shop-ph shop-ph-square">{category.name}</div>
 							<p class="shop-card-title">{category.name}</p>
 						</a>
@@ -48,40 +53,26 @@
 		</section>
 	</div>
 
-	<div class="shop-container">
-		<section class="shop-section">
-			<div class="shop-section-head">
-				<h2 class="shop-section-title">Sélection du moment</h2>
-				<a href="/boutique" class="shop-link">Voir tout</a>
-			</div>
-			{#if data.featuredProducts.length > 0}
-				<div class="shop-grid shop-grid-4">
-					{#each data.featuredProducts as product (product.id)}
-						<ProductCard {product} />
-					{/each}
-				</div>
-			{:else}
-				<p style="color:var(--shop-text-muted);">Aucun produit disponible pour le moment.</p>
-			{/if}
-		</section>
-	</div>
+	{#if data.featuredProducts.length > 0}
+		<ProductRunner products={data.featuredProducts} />
+	{/if}
 
 	<div class="shop-container">
 		<section class="shop-section">
 			<div class="shop-value-props">
-				<div class="shop-value-prop">
+				<div class="shop-value-prop" use:reveal={{ delay: 0 }}>
 					<span class="shop-icon-ph">i</span>
 					<p>Livraison sous 5 à 7 jours ouvrés</p>
 				</div>
-				<div class="shop-value-prop">
+				<div class="shop-value-prop" use:reveal={{ delay: 90 }}>
 					<span class="shop-icon-ph">i</span>
 					<p>Retours sous 14 jours</p>
 				</div>
-				<div class="shop-value-prop">
+				<div class="shop-value-prop" use:reveal={{ delay: 180 }}>
 					<span class="shop-icon-ph">i</span>
 					<p>Paiement sécurisé par Stripe</p>
 				</div>
-				<div class="shop-value-prop">
+				<div class="shop-value-prop" use:reveal={{ delay: 270 }}>
 					<span class="shop-icon-ph">i</span>
 					<p>Service client réactif</p>
 				</div>
@@ -89,7 +80,7 @@
 		</section>
 	</div>
 
-	<section class="shop-newsletter">
+	<section class="shop-newsletter" use:reveal>
 		<h2 class="shop-section-title" style="margin:0;">Restez informés</h2>
 		<p style="color:var(--shop-text-muted); margin:8px 0 0;">
 			Recevez nos nouveautés et offres en avant-première.

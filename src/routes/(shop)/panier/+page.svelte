@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { fade, slide } from 'svelte/transition';
 	import { cart, removeFromCart, updateCartItemQuantity } from '$lib/store/Data/cartStore';
+	import { reveal } from '$lib/actions/reveal';
 	import { formatPrice } from '$lib/utils/formatPrice';
 </script>
 
@@ -11,7 +13,7 @@
 
 <main class="shop-container">
 	{#if $cart.items.length === 0}
-		<div class="shop-empty-state">
+		<div class="shop-empty-state" in:fade={{ duration: 300 }}>
 			<div class="shop-ph">Panier</div>
 			<p>Votre panier est vide.</p>
 			<a href="/boutique" class="shop-btn" style="margin-top:16px; display:inline-block;"
@@ -30,7 +32,7 @@
 				</thead>
 				<tbody>
 					{#each $cart.items as item (item.id)}
-						<tr>
+						<tr transition:slide={{ duration: 220 }}>
 							<td>
 								<div class="shop-cart-row-product">
 									<div class="shop-ph">
@@ -81,7 +83,7 @@
 				</tbody>
 			</table>
 
-			<div class="shop-order-summary">
+			<div class="shop-order-summary" use:reveal>
 				<h4 style="font-size:16px; margin:0;">Récapitulatif</h4>
 				<div class="shop-summary-row">
 					<span>Sous-total</span><span>{formatPrice($cart.subtotal)}</span>

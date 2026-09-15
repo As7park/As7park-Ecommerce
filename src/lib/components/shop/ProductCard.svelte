@@ -1,15 +1,25 @@
 <script lang="ts">
 	import { splatCard } from '$lib/actions/splatCard';
+	import { reveal } from '$lib/actions/reveal';
 	import { formatPrice } from '$lib/utils/formatPrice';
 
 	let {
-		product
+		product,
+		index = 0,
+		revealOnScroll = true
 	}: {
 		product: { slug: string; name: string; price: number; images: string[] };
+		index?: number;
+		revealOnScroll?: boolean;
 	} = $props();
 </script>
 
-<a class="shop-card" href={`/produit/${product.slug}`} use:splatCard>
+<a
+	class="shop-card"
+	href={`/produit/${product.slug}`}
+	use:splatCard
+	use:reveal={{ delay: index * 70, enabled: revealOnScroll }}
+>
 	<div class="shop-ph shop-ph-portrait">
 		{#if product.images?.[0]}
 			<img src={product.images[0]} alt={product.name} loading="lazy" />

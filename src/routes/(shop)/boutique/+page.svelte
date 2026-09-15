@@ -1,5 +1,8 @@
 <script lang="ts">
 	import ProductCard from '$lib/components/shop/ProductCard.svelte';
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+	import { reveal } from '$lib/actions/reveal';
 
 	let { data } = $props();
 
@@ -85,7 +88,7 @@
 
 <main class="shop-container">
 	<div class="shop-listing-layout">
-		<aside class="shop-filters">
+		<aside class="shop-filters" use:reveal>
 			<div class="shop-filter-group">
 				<h4>Catégorie</h4>
 				{#if data.categories.length > 0}
@@ -171,8 +174,10 @@
 
 			{#if pageProducts.length > 0}
 				<div class="shop-grid shop-grid-4">
-					{#each pageProducts as product (product.id)}
-						<ProductCard {product} />
+					{#each pageProducts as product, i (product.id)}
+						<div in:fly={{ y: 18, duration: 400, delay: i * 45, easing: quintOut }}>
+							<ProductCard {product} revealOnScroll={false} />
+						</div>
 					{/each}
 				</div>
 

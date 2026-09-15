@@ -7,17 +7,31 @@
 	   ========================================================= */
 	import { onMount, onDestroy } from 'svelte';
 	import * as THREE from 'three';
+	import { gsap } from 'gsap';
 
 	let { children } = $props();
 
 	let canvasEl: HTMLCanvasElement;
 	let contentEl: HTMLDivElement;
+	let introEl: HTMLDivElement;
 	let sectionEl: HTMLElement;
 
 	let rafId = 0;
 	const cleanups: Array<() => void> = [];
 
 	onMount(() => {
+		if (introEl) {
+			const targets = introEl.children;
+			gsap.to(targets, {
+				opacity: 1,
+				y: 0,
+				duration: 0.9,
+				ease: 'power3.out',
+				stagger: 0.12,
+				delay: 0.2
+			});
+		}
+
 		if (!canvasEl) return;
 
 		const BG_NEAR = 0x18201c;
@@ -362,7 +376,9 @@
 	<div class="shop-hero-grain"></div>
 	<div class="shop-container shop-hero-dark-inner">
 		<div class="shop-hero-content" bind:this={contentEl}>
-			{@render children?.()}
+			<div class="shop-hero-intro" bind:this={introEl}>
+				{@render children?.()}
+			</div>
 		</div>
 	</div>
 	<div class="shop-hero-scroll-cue">Scroll</div>
