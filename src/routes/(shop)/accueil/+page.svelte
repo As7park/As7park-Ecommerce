@@ -2,6 +2,7 @@
 	import HeroDark from '$lib/components/shop/HeroDark.svelte';
 	import ProductRunner from '$lib/components/shop/ProductRunner.svelte';
 	import { reveal } from '$lib/actions/reveal';
+	import { splatCard } from '$lib/actions/splatCard';
 
 	let { data } = $props();
 </script>
@@ -40,6 +41,8 @@
 						<a
 							class="shop-card"
 							href={`/boutique?categorie=${category.id}`}
+							data-wheel-nav
+							use:splatCard
 							use:reveal={{ delay: i * 70 }}
 						>
 							<div class="shop-ph shop-ph-square">{category.name}</div>
@@ -54,7 +57,11 @@
 	</div>
 
 	{#if data.featuredProducts.length > 0}
-		<ProductRunner products={data.featuredProducts} />
+		<ProductRunner
+			products={data.featuredProducts}
+			title="Nouveautés"
+			subtitle="Une sélection qui bouge vite — glisse pour tout voir."
+		/>
 	{/if}
 
 	<div class="shop-container">

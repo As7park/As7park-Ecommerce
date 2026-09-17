@@ -17,6 +17,7 @@
 <a
 	class="shop-card"
 	href={`/produit/${product.slug}`}
+	data-wheel-nav
 	use:splatCard
 	use:reveal={{ delay: index * 70, enabled: revealOnScroll }}
 >

@@ -32,11 +32,15 @@
 					>
 				</li>
 				<li>
+					<a href="/accueil">Nouveautés</a>
+				</li>
+				<li>
 					<a href="/contact" class:shop-active={$page.url.pathname === '/contact'}>Contact</a>
 				</li>
 			</ul>
 		</nav>
 		<div class="shop-header-actions">
+			<button type="button" aria-label="Recherche"><span class="shop-icon-ph">Q</span></button>
 			<a href="/auth" aria-label="Compte"><span class="shop-icon-ph">C</span></a>
 			<a href="/panier" aria-label="Panier" class="shop-cart-link">
 				<span class="shop-icon-ph">P</span>

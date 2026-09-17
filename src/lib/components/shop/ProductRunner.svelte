@@ -103,15 +103,6 @@
 	}
 </script>
 
-<svelte:head>
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link
-		href="https://fonts.googleapis.com/css2?family=Staatliches&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-		rel="stylesheet"
-	/>
-</svelte:head>
-
 <section class="stage">
 	<div class="grain"></div>
 	<div class="speedlines"></div>
@@ -150,6 +141,7 @@
 				<a
 					class="card"
 					href={`/produit/${product.slug}`}
+					data-wheel-nav
 					onclick={(e) => handleCardClick(e, `/produit/${product.slug}`)}
 				>
 					<div class="plate">

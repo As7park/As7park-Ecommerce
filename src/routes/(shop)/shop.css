@@ -6,24 +6,47 @@
    ========================================================= */
 
 .shop-scope {
-	--shop-border: #cfcfcf;
-	--shop-border-strong: #9a9a9a;
-	--shop-bg: #ffffff;
-	--shop-bg-muted: #f4f4f4;
-	--shop-placeholder-bg: #e4e4e4;
-	--shop-placeholder-text: #7a7a7a;
-	--shop-text: #1a1a1a;
-	--shop-text-muted: #6b6b6b;
+	--shop-ink: #14120f;
+	--shop-panel: #1d1a15;
+	--shop-paper: #f2efe4;
+	--shop-orange: #ff5a1f;
+	--shop-acid: #c9f04d;
+	--shop-dust: #8a6f52;
+	--shop-rust: #7a2e12;
+	--shop-font-display: 'Staatliches', sans-serif;
+	--shop-font-body: 'Space Grotesk', sans-serif;
+
+	--shop-border: rgba(242, 239, 228, 0.22);
+	--shop-border-strong: rgba(242, 239, 228, 0.4);
+	--shop-bg: var(--shop-ink);
+	--shop-bg-muted: var(--shop-panel);
+	--shop-placeholder-bg: #17140f;
+	--shop-placeholder-text: var(--shop-dust);
+	--shop-text: var(--shop-paper);
+	--shop-text-muted: var(--shop-dust);
 	--shop-gap: 24px;
 	--shop-gap-sm: 12px;
 	--shop-radius: 0px;
 	--shop-container: 1200px;
 
 	font-size: 16px;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+	font-family:
+		var(--shop-font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 	color: var(--shop-text);
 	background: var(--shop-bg);
 	line-height: 1.4;
+	-webkit-font-smoothing: antialiased;
+}
+
+.shop-section-title,
+.shop-hero-title-light,
+.shop-hero-title,
+.shop-product-title,
+.shop-card-title,
+.shop-logo {
+	font-family: var(--shop-font-display);
+	font-weight: 400;
+	letter-spacing: 0.3px;
 }
 
 .shop-scope * {
@@ -476,6 +499,37 @@ a.shop-logo:hover {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+	position: relative;
+}
+.shop-grid {
+	counter-reset: shop-platenum;
+}
+.shop-card:nth-child(3n + 2) {
+	--shop-shadow-c: var(--shop-acid);
+}
+.shop-card:nth-child(3n) {
+	--shop-shadow-c: var(--shop-rust);
+}
+.shop-card::before {
+	counter-increment: shop-platenum;
+	content: counter(shop-platenum, decimal-leading-zero);
+	position: absolute;
+	top: -9px;
+	right: -9px;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	border: 2px solid var(--shop-ink);
+	background: var(--shop-shadow-c, var(--shop-orange));
+	color: var(--shop-ink);
+	font-family: var(--shop-font-display);
+	font-size: 0.82rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: rotate(-6deg);
+	z-index: 3;
+	pointer-events: none;
 }
 
 /* ---------- Interaction "projection de boue/liquide" — confinée à la dalle image ---------- */
@@ -489,12 +543,18 @@ a.shop-card:hover {
 a.shop-card .shop-ph {
 	position: relative;
 	overflow: hidden;
+	border: 2px solid var(--shop-paper);
+	clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+	box-shadow: 6px 6px 0 var(--shop-shadow-c, var(--shop-orange));
+	background:
+		radial-gradient(circle, rgba(242, 239, 228, 0.14) 1px, transparent 1.3px) 0 0 / 10px 10px,
+		#17140f;
 	transition:
 		transform 0.4s cubic-bezier(0.34, 1.2, 0.4, 1),
 		box-shadow 0.35s ease;
 }
 a.shop-card:hover .shop-ph {
-	box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12);
+	box-shadow: 10px 10px 0 var(--shop-shadow-c, var(--shop-orange));
 }
 a.shop-card .shop-ph img {
 	transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
@@ -546,15 +606,24 @@ a.shop-card.shop-is-splatting .shop-splat-mark {
 	margin: 0;
 }
 .shop-card-price {
-	font-size: 14px;
-	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	font-size: 13px;
+	font-weight: 700;
 	margin: 0;
+	padding: 0.26rem 0.55rem 0.26rem 0.45rem;
+	border: 1.5px dashed var(--shop-dust);
+	border-radius: 3px;
+	color: var(--shop-acid);
+	transform: rotate(1.2deg);
+	width: fit-content;
 }
 .shop-card-price .shop-old {
 	text-decoration: line-through;
 	color: var(--shop-text-muted);
 	font-weight: 400;
-	margin-right: 6px;
+	margin-right: 2px;
 }
 
 /* ---------- Bandeau valeurs ---------- */
@@ -984,13 +1053,13 @@ a.shop-card.shop-is-splatting .shop-splat-mark {
 .shop-form-field textarea:focus {
 	outline: none;
 	border-color: var(--shop-text);
-	box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.08);
+	box-shadow: 0 0 0 3px rgba(242, 239, 228, 0.18);
 }
 .shop-newsletter-form input:focus,
 .shop-price-range input:focus {
 	outline: none;
 	border-color: var(--shop-text);
-	box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.08);
+	box-shadow: 0 0 0 3px rgba(242, 239, 228, 0.18);
 }
 .shop-form-field textarea {
 	resize: vertical;
@@ -1041,4 +1110,36 @@ a.shop-card.shop-is-splatting .shop-splat-mark {
 	.shop-main-nav {
 		display: none;
 	}
+}
+
+/* ---------- Curseur de chargement : roue de cross ---------- */
+.shop-wheel-cursor {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 34px;
+	height: 34px;
+	pointer-events: none;
+	z-index: 9999;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	mix-blend-mode: difference;
+}
+.shop-wheel-cursor.shop-visible {
+	opacity: 1;
+}
+.shop-wheel-cursor svg {
+	width: 100%;
+	height: 100%;
+	animation: shop-wheel-spin 0.45s linear infinite;
+	transform-origin: 50% 50%;
+}
+@keyframes shop-wheel-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+html.shop-is-loading,
+html.shop-is-loading * {
+	cursor: none !important;
 }
